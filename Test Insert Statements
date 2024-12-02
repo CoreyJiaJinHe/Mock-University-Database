@@ -1,0 +1,159 @@
+Insert into faculty values(faculty_t('Liberal Arts', 'FLAPS') );
+
+Insert into faculty values(faculty_t('Health', 'FHa') );
+
+Insert into faculty values(faculty_t('Graduate Studies', 'FGS') );
+
+Insert into faculty values(faculty_t('Arts, Media, Design', 'FAMPD') );
+
+Insert into faculty values(faculty_t('Home', 'FHo') );
+
+Insert into department values(department_t( 'DITEC', 'ITEC' ,(select ref(f) from Faculty f where f.FacultyID = 'FLAPS')));
+
+Insert into department values(department_t('DP','Psychology',(select ref(f) from Faculty f where f.FacultyID = 'FHa')));
+
+Insert into department values(department_t('DDM', 'Digital Media',(select ref(f) from Faculty f where f.FacultyID = 'FAMPD')));
+
+Insert into department values(department_t('Dco','Cooking',(select ref(f) from Faculty f where f.FacultyID = 'FHo')));
+
+Insert into professor values(professor_t('Michael Kremer', '26 Mars St','289006060','Michael@uni.ca','987654324','588732941','Canada Bank', '320809554', 'T', (select ref (d) from Department d where d.DepartmentID='DCo')));
+
+
+Insert into professor values(professor_t('Steven King', '19 Bryan Street', '9203307348', 'Steven@uni.ca', '1111222233', '4083516958', 'Americas Bank', '320910665', 'T', (select ref (d) from Department d where d.DepartmentID='DCo')));
+
+
+Insert into professor values(professor_t('Tim Wells','09 Hartland Avenue','9202411105','Tim@uni.ca','2222333344','9203307348','Americas Bank',
+  2  '820146297', 'F', (select ref (d) from Department d where d.DepartmentID='DITEC')));
+
+
+Insert into professor values(professor_t('Joseph Anderson','37 Driftwood Road','4083516958','Joseph@uni.ca','3333444455','6516452139','Americas Bank', '050719224', 'T', (select ref(d) from Department d where d.DepartmentID= 'DP')));
+
+
+Insert into professor values(professor_t('Harry Potter','18 B Street','5052267537','Harry@uni.ca','4444555566','None','Americas Bank', '033221100', 'F', (select ref(d) from Department d where d.DepartmentID= 'DDM')));
+
+Insert into course values(course_t('ITEC1010',(select ref(f) from Faculty f where f.FacultyID = 'FLAPS'),(select ref (d) from Department d where d.DepartmentID='DITEC'),'950','Keele','3'));
+
+Insert into course values(course_t('ITEC2620',(select ref(f) from Faculty f where f.FacultyID = 'FLAPS'),(select ref (d) from Department d where d.DepartmentID='DITEC'),'975', 'Keele','3'));
+
+Insert into course values(course_t('ITEC3010',(select ref(f) from Faculty f where f.FacultyID = 'FLAPS'),(select ref (d) from Department d where d.DepartmentID='DITEC'),'960', 'Keele','3'));
+
+Insert into course values(course_t('ITEC3505',(select ref(f) from Faculty f where f.FacultyID = 'FLAPS'),(select ref (d) from Department d where d.DepartmentID='DITEC'),'980','Keele','3'));
+
+Insert into course values(course_t('COOK1000',(select ref(f) from Faculty f where f.FacultyID = 'FHo'),(select ref (d) from Department d where d.DepartmentID='DCo'),'1000','Keele','3'));
+
+Insert into course values(course_t('COOK2000',(select ref(f) from Faculty f where f.FacultyID = 'FHo'),(select ref (d) from Department d where d.DepartmentID='DCo'),'1010','Keele','3'));
+
+Insert into CoursePreReq values(courseprerequisites_t('CPRID1',(select ref(c) from Course c where c.CourseID= 'ITEC2620'),(select ref(c) from Course c where c.CourseID='ITEC1010')));
+
+Insert into CoursePreReq values(courseprerequisites_t('CPRID2',(select ref(c) from Course c where c.CourseID= 'ITEC3010'),(select ref(c) from Course c where c.CourseID= 'ITEC2620')));
+
+Insert into CoursePreReq values(courseprerequisites_t('CPRID3',(select ref(c) from Course c where c.CourseID= 'ITEC3505'),(select ref(c) from Course c where c.CourseID= 'ITEC3010')));
+
+Insert into CoursePreReq values(courseprerequisites_t('CPRID4',(select ref(c) from Course c where c.CourseID= 'COOK2000'),(select ref(c) from Course c where c.CourseID= 'COOK1000')));
+
+Insert into CoursePreReq values(courseprerequisites_t('CPRID5',(select ref(c) from Course c where c.CourseID= 'ITEC2010'),(select ref(c) from Course c where c.CourseID= 'ITEC1010')));
+
+
+Insert into section values (section_t((select ref(c) from Course c where c.CourseID = 'ITEC1010'),(select ref(p) from Professor p where p.ProfID='820146297'),'ITEC1010M','T1300','Sept 9','Dec3','VH5','300','259', coursetypes_t('LEC')));
+
+
+
+Insert into section values (section_t((select ref(c) from Course c where c.CourseID = 'ITEC2620'),(select ref(p) from Professor p where p.ProfID='033221100'),'ITEC2620A','T800','Sept 12','Dec5','DB007','50','46',coursetypes_t( 'BLEN')));
+
+
+Insert into section values (section_t((select ref(c) from Course c where c.CourseID = 'ITEC3010'),(select ref(p) from Professor p where p.ProfID='033221100'),'ITEC3010B','T1700','Jan 6','Apr3','ACE002','200','157',coursetypes_t('LEC')));
+
+
+
+Insert into section values (section_t((select ref(c) from Course c where c.CourseID = 'ITEC3505'),(select ref(p) from Professor p where p.ProfID='820146297'),'ITEC3505N','T1100','Jan11','Apr6','ACW205','70','66',coursetypes_t('BLEN')));
+
+
+Insert into section values (section_t((select ref(c) from Course c where c.CourseID = 'COOK1000'),(select ref(p) from Professor p where p.ProfID='320809554'),'COOK1000A','W1500','Sept9','Dec3','ACW009','50','21',coursetypes_t('LAB')));
+
+
+Insert into section values (section_t((select ref(c) from Course c where c.CourseID = 'COOK2000'),(select ref(p) from Professor p where p.ProfID='320809554'),'COOK2000A','W1700','Sept9','Dec3','ACE017','40','9',coursetypes_t('LAB')));
+
+
+Insert into section values (section_t((select ref(c) from Course c where c.CourseID = 'COOK1000'),(select ref(p) from Professor p where p.ProfID='320910665'),'COOK1000B','W1700','Sept9','Dec3','ACE017','50','45',coursetypes_t('LAB')));
+
+
+Insert into section values (section_t((select ref(c) from Course c where c.CourseID = 'COOK2000'),(select ref(p) from Professor p where p.ProfID='320910665'),'COOK2000B','W1700','Sept9','Dec3','ACE017','40','21',coursetypes_t('LAB')));
+
+Insert into DegreeProgram values (DegreeProgram_t('BA_ITEC',(select ref(f) from Faculty f where f.FacultyID = 'FLAPS'),'60','90'));
+
+Insert into DegreeProgram values (DegreeProgram_t('BAH_ITEC',(select ref(f) from Faculty f where f.FacultyID = 'FLAPS'),'80','120'));
+
+Insert into DegreeProgram values (DegreeProgram_t('BA_HO',(select ref(f) from Faculty f where f.FacultyID = 'FHO'),'60','60'));
+
+Insert into DegreeProgram values (DegreeProgram_t('BAH_HO',(select ref(f) from Faculty f where f.FacultyID = 'FHO'),'80','90'));
+
+Insert into DegreeRequisite values (DegreeRequisite_t('BAITEC01', (select ref(d) from DegreeProgram d where d.DegreeID = 'BA_ITEC'),(select ref (c) from Course c where c.CourseID ='ITEC1010')));
+
+Insert into DegreeRequisite values (DegreeRequisite_t('BAITEC02', (select ref(d) from DegreeProgram d where d.DegreeID = 'BA_ITEC'),(select ref (c) from Course c where c.CourseID ='ITEC2620')));
+
+Insert into DegreeRequisite values (DegreeRequisite_t('BAITEC03', (select ref(d) from DegreeProgram d where d.DegreeID = 'BA_ITEC'),(select ref (c) from Course c where c.CourseID ='ITEC3010')));
+
+Insert into DegreeRequisite values (DegreeRequisite_t('BAITEC04', (select ref(d) from DegreeProgram d where d.DegreeID = 'BA_ITEC'),(select ref (c) from Course c where c.CourseID ='ITEC3505')));
+
+
+Insert into DegreeRequisite values (DegreeRequisite_t('BAHITEC01', (select ref(d) from DegreeProgram d where d.DegreeID = 'BAH_ITEC'),(select ref (c) from Course c where c.CourseID ='ITEC1010')));
+
+Insert into DegreeRequisite values (DegreeRequisite_t('BAHITEC02', (select ref(d) from DegreeProgram d where d.DegreeID = 'BAH_ITEC'),(select ref (c) from Course c where c.CourseID ='ITEC2620')));
+
+Insert into DegreeRequisite values (DegreeRequisite_t('BAHITEC03', (select ref(d) from DegreeProgram d where d.DegreeID = 'BAH_ITEC'),(select ref (c) from Course c where c.CourseID ='ITEC3010')));
+
+Insert into DegreeRequisite values (DegreeRequisite_t('BAHITEC04', (select ref(d) from DegreeProgram d where d.DegreeID = 'BAH_ITEC'),(select ref (c) from Course c where c.CourseID ='ITEC3505')));
+
+
+Insert into DegreeRequisite values (DegreeRequisite_t('BAHO01', (select ref(d) from DegreeProgram d where d.DegreeID = 'BA_HO'),(select ref (c) from Course c where c.CourseID ='COOK1000')));
+
+Insert into DegreeRequisite values (DegreeRequisite_t('BAHO02', (select ref(d) from DegreeProgram d where d.DegreeID = 'BA_HO'),(select ref (c) from Course c where c.CourseID ='COOK2000')));
+
+Insert into DegreeRequisite values (DegreeRequisite_t('BAHHO01', (select ref(d) from DegreeProgram d where d.DegreeID = 'BAH_HO'),(select ref (c) from Course c where c.CourseID ='COOK1000')));
+
+Insert into DegreeRequisite values (DegreeRequisite_t('BAHHO02', (select ref(d) from DegreeProgram d where d.DegreeID = 'BAH_HO'),(select ref (c) from Course c where c.CourseID ='COOK2000')));
+
+insert into student values (student_t('JamesLee', 'Kirby St', '2890090909', 'Jame@uni.ca', '987654320', 'Null', 'CanadaBank','217457527', 'U', (select ref(f) from Faculty f where f.FacultyID='FLAPS'), (select ref(dp) from DegreeProgram dp where dp.DegreeID='BA_ITEC')));
+
+insert into student values (student_t('Brian Musa', 'ClaystonSt', '2890040808', 'brimu@uni.ca', '954615648', 'Null', 'TDBank','214334587', 'G', (select ref(f) from Faculty f where f.FacultyID='FGS'),(select ref(dp) from DegreeProgram dp where dp.DegreeID='BA_ITEC')));
+
+insert into student values(student_t('Chris Forrest','69 Clayson St','2890040808','forrestc@uni.ca','978445615','Null','Scotia Bank','217978542', 'G', (select ref(f) from Faculty f where f.FacultyID='FGS'),(select ref(dp) from DegreeProgram dp where dp.DegreeID='BAH_ITEC')));
+
+insert into student values(student_t('Daniel Samms','45 Yonge St','2892003959','Dsmmas@uni,ca','982456873','Null','TD Bank','218574681','U', (select ref(f) from Faculty f where f.FacultyID='FAMPD'),(select ref(dp) from DegreeProgram dp where dp.DegreeID='BA_HO')));
+
+
+Insert into student values(student_t('Person A','1st Street','2890000001','PersonC@uni.ca','1111111111', 'Null','TD Bank','218574682','U',(select ref(f) from Faculty f where f.FacultyID='FGS'),(select ref(dp) from DegreeProgram dp where dp.DegreeID='BAH_HO')));
+
+
+Insert into student values(student_t('Person B','2nd Street','2890000002','PersonB@uni.ca','1111111112', 'Null','TD Bank','218574683','U',(select ref(f) from Faculty f where f.FacultyID='FGS'), (select ref(dp) from DegreeProgram dp where dp.DegreeID='BA_HO')));
+
+
+Insert into student values(student_t('Person C','3rd Street','2890000003','PersonC@uni.ca','1111111113', 'Null','TD Bank','218574684','U',(select ref(f) from Faculty f where f.FacultyID='FGS'), (select ref(dp) from DegreeProgram dp where dp.DegreeID='BA_ITEC')));
+
+Insert into STranscript values(studenttranscript_t('001',(select ref (s) from Student s where s.SID='217457527'),(select ref (sec) from Section sec where sec.SectionID='ITEC1010M'),'3','90'));
+
+Insert into STranscript values(studenttranscript_t('002',(select ref (s) from Student s where s.SID='218574684'),(select ref (sec) from Section sec where sec.SectionID='ITEC2620A'),'3','85'));
+
+Insert into STranscript values(studenttranscript_t('003',(select ref (s) from Student s where s.SID='218574684'),(select ref (sec) from Section sec where sec.SectionID='ITEC3010B'),'3','68'));
+
+Insert into STranscript values(studenttranscript_t('004',(select ref (s) from Student s where s.SID='218574681'),(select ref (sec) from Section sec where sec.SectionID='ITEC3505N'),'3','74'));
+
+Insert into STranscript values(studenttranscript_t('005',(select ref (s) from Student s where s.SID='218574684'),(select ref (sec) from Section sec where sec.SectionID='ITEC3505N'),'3','96'));
+
+Insert into STranscript values(studenttranscript_t('006',(select ref (s) from Student s where s.SID='218574682'),(select ref (sec) from Section sec where sec.SectionID='COOK1000A'),'3','87'));
+
+Insert into STranscript values(studenttranscript_t('007',(select ref (s) from Student s where s.SID='218574683'),(select ref (sec) from Section sec where sec.SectionID='COOK2000A'),'3','83'));
+
+Insert into STranscript values(studenttranscript_t('008',(select ref (s) from Student s where s.SID='218574684'),(select ref (sec) from Section sec where sec.SectionID='ITEC1010M'),'3','69'));
+
+Insert into STranscript values(studenttranscript_t('009',(select ref (s) from Student s where s.SID='218574681'),(select ref (sec) from Section sec where sec.SectionID='ITEC1010M'),'3','76'));
+
+Insert into STranscript values(studenttranscript_t('010',(select ref (s) from Student s where s.SID='218574683'),(select ref (sec) from Section sec where sec.SectionID='ITEC1010M'),'3','89'));
+
+Insert into STranscript values(studenttranscript_t('011',(select ref (s) from Student s where s.SID='217457527'),(select ref (sec) from Section sec where sec.SectionID='COOK1000A'),'3','73'));
+
+Insert into STranscript values(studenttranscript_t('012',(select ref (s) from Student s where s.SID='218574681'),(select ref (sec) from Section sec where sec.SectionID='COOK2000A'),'3','79'));
+
+Insert into STranscript values(studenttranscript_t('013',(select ref (s) from Student s where s.SID='218574684'),(select ref (sec) from Section sec where sec.SectionID='COOK1000B'),'3','52'));
+
+Insert into STranscript values(studenttranscript_t('014',(select ref (s) from Student s where s.SID='218574684'),(select ref (sec) from Section sec where sec.SectionID='COOK2000B'),'3','12'));

@@ -1,0 +1,68 @@
+--Find the Students taking Courses under Professor Michael Kremer
+
+SELECT XMLROOT(XMLELEMENT("Course", 
+XMLAGG(XMLELEMENT("Section", XMLATTRIBUTES (st.secoid.SectionId as "SectionID"),
+XMLAGG(XMLELEMENT("Student", XMLATTRIBUTES(st.soid.sid as "sid"),
+xmlelement("name", st.soid.name)))))), version '1.0') as RESULT
+from STranscript st where st.secoid.proid.name='Michael Kremer' GROUP BY st.secoid.sectionID;
+
+--Find the preferred e-mail of the Professors teaching COOK1000
+	
+select XMLROOT(XMLELEMENT("Course",
+XMLAGG(XMLELEMENT("Professor", XMLATTRIBUTES(p.ProfID as "ProfID"),
+XMLAGG(xmlelement("Email", XMLATTRIBUTES(p.prefEmail as "PrefEmail")))))), version '1.0') as RESULT from Professor p, Section s where s.proid.name=p.name AND s.coid.CourseID='COOK1000' GROUP BY p.profID;
+
+--Find the Courses and their Max Capacity for Courses with "LEC" type.
+
+
+SELECT XMLROOT(
+XMLELEMENT("CourseList", XMLAGG( XMLELEMENT("Course", XMLATTRIBUTES(c.CourseID as "cid"), XMLForest(c.calculateMaxCapacity(c.CourseID) as "MaxCapacity", s.ctype.CourseTYPE as "CourseType"))
+)), version '1.0') AS RESULT FROM Course c, Section s where s.coid.CourseID=c.CourseID AND s.ctype.scoursetype()='LEC';
+	
+--Find the Faculty ID of Courses that that a Course Type of BLEN
+
+Select XMLROOT(XMLELEMENT("Faculty", XMLATTRIBUTES(c.foid.FacultyID as "FacultyID"), XMLAGG(XMLELEMENT("CourseID", XMLATTRIBUTES(c.CourseID as "CourseID")))), version '1.0') as RESULT from Course c, Section s where s.coid.CourseID = c.CourseID AND s.ctype.scoursetype()='BLEN' GROUP BY c.foid.FacultyID;
+
+--Find the IDs of Graduate Students who have a degree in 'BA_ITEC'
+
+SELECT XMLROOT(
+XMLELEMENT("GraduateStudents",
+XMLAGG(XMLELEMENT("StudentID", XMLATTRIBUTES(s.sid as "StudentID"),
+XMLAGG(XMLFOREST(s.name as "StudentName", s.gradStat as "StudentStatus"))))), version '1.0') AS RESULT FROM Student s where s.dpoid.DegreeID='BA_ITEC' AND s.gradStat ='G' GROUP BY s.sid;
+
+--Find the Student IDs of Students who are taking a Course whose Current Capacity is less than Max Capacity
+
+Select XMLROOT(XMLELEMENT("Sections",XMLAGG(XMLELEMENT("SectionID", XMLATTRIBUTES(st.secoid.SectionID as "SectionID"), XMLAGG(XMLFOREST(st.soid.sid as "StudentID"))))) ,version '1.0') as RESULT from STranscript st where st.secoid.CurrentCapacity < st.secoid.MaxCapacity GROUP BY st.secoid.SectionID;
+
+
+--Find the Cost of Sections that have a Max Capacity of 150 or more		
+
+SELECT XMLROOT(XMLELEMENT("SectionList",XMLAGG(XMLELEMENT("cost", XMLATTRIBUTES(s.coid.cost as "cost"),XMLForest(s.maxcapacity as "MaxCapacity")))), version '1.0') AS RESULT FROM Section s where s.maxcapacity>150;
+
+--Find the Start Date of Sections in the Faculty id 'FLAPS'
+
+SELECT XMLROOT(XMLELEMENT("SectionList",
+XMLAGG(XMLELEMENT("Section", XMLATTRIBUTES(s.coid.courseid as "sname"),XMLForest(s.coid.foid.FacultyID as "FacultyName"),XMLForest(s.StartDate as "StartDate")))), version '1.0') AS RESULT FROM Section s where s.coid.foid.FacultyID = 'FLAPS';
+
+
+--Find the Banking Info of the Professors who are teaching a Course that requires 'ITEC1010' as a prerequisite. 	
+
+SELECT XMLROOT(	XMLELEMENT("ProfList",XMLAGG(XMLELEMENT("Professor", XMLATTRIBUTES(p.name as "pname"),
+XMLForest(p.banking as "Banking")))), version '1.0') 
+AS RESULT FROM Section s, CoursePreReq cpr, professor p where cpr.prcoid.CourseID = 'ITEC1010' AND s.coid.CourseID=cpr.coid.CourseID AND p.ProfID = s.proid.ProfID;
+ 
+	
+--Find the RoomID of courses in the 'ITEC' Department
+
+SELECT XMLROOT(XMLELEMENT("ITECDepartment", XMLAGG(xmlelement("Section",xmlattributes(s.sectionid as "SID"),xmlelement("RoomID", s.roomid)))), version '1.0') as RESULT from Section s WHERE s.coid.doid.departmentid = 'DITEC';
+
+
+
+--Find the Degree Program ID for Students who are enrolled in a 'BLEN' Course Type 
+	
+SELECT XMLROOT(XMLELEMENT("DegreeProgram", XMLAGG(xmlelement("Student",xmlattributes(st.soid.sid as "SID"),xmlelement("DegreeID", st.soid.dpoid.DegreeID)))), version '1.0') as RESULT from STranscript st WHERE st.secoid.CTYPE=COURSETYPES_T('BLEN');
+
+
+--Find the SIN # of Students in 'ITEC3505N'
+
+select xmlroot(xmlelement("ITEC3505",xmlelement("Students",xmlagg(xmlelement("sin",s.soid.sin) ))),version '1.0') as result from stranscript s where s.secoid.sectionid = 'ITEC3505N';

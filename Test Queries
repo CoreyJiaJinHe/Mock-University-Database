@@ -1,0 +1,37 @@
+--Find names of home faculties of students who took courses from professor Michael Kremer
+Select st.soid.name
+from STranscript st where st.secoid.proid.Name = 'Michael Kremer';
+Get the information of the students who are enrolled in ITEC1010 section 'M' and the professor who teaches that section.
+Select st.soid.getDetails(), st.secoid.proid.getDetails() from STranscript st where st.secoid.sectionid='ITEC1010M';
+--Find the names, ids and marks of the students taking 'ITEC1010M', output them in order.
+Select st.soid.name, st.soid.sid, st.grade from STranscript st where st.secoid.sectionid='ITEC1010M' Order by value(st);
+Select st.soid.name, st.soid.sid, st.grade from STranscript st where st.secoid.sectionid='ITEC1010M' ;
+--Find the pref email of the professor teaching ITEC 3010 section 'B'
+Select s.proid.PrefEmail
+from Section S where s.sectionid = 'ITEC3010B';
+--Find the faculty ID of courses that that a course type of BLEN
+Select S.coid.courseid, S.coid.foid.facultyid
+from section S where s.ctype.courseType = 'BLEN';
+--Find the courses and their max capacity for courses with type 'LEC' and put them in alphabetical order.
+Select c.courseid, c.calculatemaxCapacity(c.courseid) from Course c, Section s WHERE s.ctype.scoursetype()='LAB' AND s.coid.courseID=c.courseid ORDER by value(c);
+--Find the cost of courses that have a max capacity of 150 or more
+select s.coid.courseid, s.coid.cost
+from section s where s.MaxCapacity >= 150;
+--Find the ID of graduate students who have a degree in 'BA_ITEC' 
+select s.name, s.sid
+from Student s where s.dpoid.degreeID = 'BA_ITEC' 
+and s.gradstat = 'G';
+--Find the start date of sections in the Faculty id 'FLAPS'
+select s.coid.courseid, s.StartDate
+from Section s where s.coid.foid.FacultyID = 'FLAPS' ;
+--Find all of the banking info of the professors who are teaching a course that require ITEC 1010 as a prerequisite.
+Select p.name, p.Banking from Professor p, Section s, CoursePreReq cpr where cpr.prcoid.CourseID = 'ITEC1010' AND s.coid.CourseID=cpr.coid.CourseID AND p.ProfID = s.proid.ProfID;
+--Find the students whose transcripts contain a course that have an end date of december 3rd
+Select Distinct s.soid.name, s.soid.sid
+from STranscript s where s.secoid.endDate='Dec3';
+--Find the Departments ID where a student has the name 'Daniel Samms'
+Select d.DepartmentName, d.DepartmentID from department d, student s
+where s.name = 'Daniel Samms' AND s.foid.FacultyID=d.foid.FacultyID;
+--Find the degree program ID for students who are enrolled in a 'BLEN' course type
+Select st.soid.dpoid.degreeID from STranscript St
+where st.secoid.ctype.courseType = 'BLEN';

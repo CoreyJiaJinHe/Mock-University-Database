@@ -1,0 +1,33 @@
+--Find the names of undergraduate students that are taking a BLEN course Corey
+
+
+OracleXML getXML -user "grp1/here4grp1" \
+-conn "jdbc:oracle:thin:@sit.itec.yorku.ca:1521:studb10g" \
+-rowsetTag "StudentList" -rowTag "Student" \
+"Select DISTINCT st.soid.name as "Name", st.soid.sid as "StudentID", st.soid.GradStat as "GradStatus", st.soid.foid.FacultyID as "FacultyID" from STranscript st where st.secoid.ctype.scoursetype()='BLEN' AND st.soid.gradstat='U'"
+
+
+--Find the required courses for all degrees in the university
+
+OracleXML getXML -user "grp1/here4grp1" \
+-conn "jdbc:oracle:thin:@sit.itec.yorku.ca:1521:studb10g" \
+-rowsetTag "DegreeCourseList" -rowTag "courses" \
+"Select DISTINCT dr.dpoid.DegreeID as "Degree", dr.coid.CourseID as "Course" from DegreeRequisite dr"
+
+
+--Find names, id, average grades of students who are taking courses in the ITEC department 
+
+OracleXML getXML -user "grp1/here4grp1" \
+-conn "jdbc:oracle:thin:@sit.itec.yorku.ca:1521:studb10g" \
+-rowsetTag "ITECDepartment" -rowTag "Students" \
+"select distinct st.soid.name as "StudentName", st.soid.sid as "StudentID", st.grade as "Grade" from stranscript st where st.secoid.coid.doid.departmentid = 'DITEC'"
+
+
+
+
+--Find the names, ids and marks of the students taking 'ITEC1010M', output them in order.
+
+OracleXML getXML -user "grp1/here4grp1" \
+-conn "jdbc:oracle:thin:@sit.itec.yorku.ca:1521:studb10g" \
+-rowsetTag "StudentList" -rowTag "students" \
+"Select DISTINCT st.soid.name as "Name", st.soid.sid as "StudentID", st.Grade as "Grade" From STranscript st where st.secoid.SectionID='ITEC1010M'"
